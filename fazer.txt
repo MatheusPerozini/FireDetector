@@ -1,6 +1,6 @@
 Colocar o código implementado no meu github
 Adapta-lo para também capturar a fumaça e o centro de massa {
 Atualmente só com a imagem sem tratamento
-ele n captura o centro de massa, obvio k
+ele n captura o centro de massa
 }
 Fazer percorrer vários arquivos para assim consigar pegar o dataset
