@@ -8,7 +8,8 @@ def nothing(x):
 
 # Load image
 url = os.path.dirname(os.path.abspath(__file__))
-image = cv2.imread(url+'/Fire-Detection/1/1.jpg')
+image = cv2.imread(url+'/Fire-Detection/1/42.jpg')
+image = cv2.resize(image, (700, 400))
 
 # Create a window
 cv2.namedWindow('image')
