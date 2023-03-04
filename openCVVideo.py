@@ -22,7 +22,9 @@ def calculaDiferenca(img1, img2, img3):
     s,imagem = cv2.threshold(imagem, 60, 255, cv2.THRESH_BINARY)
     return imagem
 
-def gerarVideos(lower, upper, out):
+def gerarVideos(lower, upper, out, hsv):
+    lower = np.array(lower , dtype='uint8')
+    upper = np.array(upper , dtype='uint8')
     mask = cv2.inRange(hsv , lower , upper)
 
     output = cv2.bitwise_and(frame , hsv , mask=mask)
@@ -63,18 +65,12 @@ while (cap.isOpened()):
         lowerFire = (0, 115, 155)
         upperFire = (30, 255, 255)
 
-        lowerFire = np.array(lowerFire , dtype='uint8')
-        upperFire = np.array(upperFire , dtype='uint8')
-
-        gerarVideos(lowerFire, upperFire, outFire)        
+        gerarVideos(lowerFire, upperFire, outFire, hsv)        
         # Mascara Fumaça
         lowerSmoke = (0, 0, 130)
         upperSmoke = (179, 50, 255)
 
-        lowerSmoke = np.array(lowerSmoke , dtype='uint8')
-        upperSmoke = np.array(upperSmoke , dtype='uint8')
-
-        gerarVideos(lowerSmoke, upperSmoke, outSmoke)
+        gerarVideos(lowerSmoke, upperSmoke, outSmoke, hsv)
 
     else:
         break
