@@ -9,8 +9,44 @@ filename = 'video.mp4'
 url = os.path.dirname(os.path.abspath(__file__))
 cap = cv2.VideoCapture(url+'/'+filename)
 
-out1 = cv2.VideoWriter('Fogo.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (700,600))
-out2 = cv2.VideoWriter('Fumaça.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (700,600))
+outFire = cv2.VideoWriter('Fogo.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (700,600))
+outSmoke = cv2.VideoWriter('Fumaça.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (700,600))
+
+def calculaDiferenca(img1, img2, img3):
+    """
+    Captura o movimento pela subtração de pixel dos frames.
+    """
+    d1 = cv2.absdiff(img3, img2)
+    d2 = cv2.absdiff(img2, img1)
+    imagem = cv2.bitwise_and(d1,d2)
+    s,imagem = cv2.threshold(imagem, 60, 255, cv2.THRESH_BINARY)
+    return imagem
+
+def gerarVideos(lower, upper, out):
+    mask = cv2.inRange(hsv , lower , upper)
+
+    output = cv2.bitwise_and(frame , hsv , mask=mask)
+
+    tamanho = cv2.countNonZero(mask)
+    print(tamanho)
+
+    ret,thresh = cv2.threshold(output,30,255,cv2.THRESH_BINARY)
+    height, width = thresh.shape[:2]
+
+    mass = 0
+    Xcm  = 0.0
+    Ycm  = 0.0
+
+    for i in range(width) :
+        for j in range(height) :
+            if not all(thresh[j][i] == 0) :
+                mass += 1
+                Xcm  += i
+                Ycm  += j
+
+    Xcm = Xcm/mass
+    Ycm = Ycm/mass
+    out.write(output)
 
 if cap.isOpened()== False:
     print("Error opening video stream or file")
@@ -30,30 +66,7 @@ while (cap.isOpened()):
         lowerFire = np.array(lowerFire , dtype='uint8')
         upperFire = np.array(upperFire , dtype='uint8')
 
-        maskFire = cv2.inRange(hsv , lowerFire , upperFire)
-
-        outputFogo = cv2.bitwise_and(frame , hsv , mask=maskFire)
-
-        tamanhoFogo = cv2.countNonZero(maskFire)
-        print(tamanhoFogo)
-
-        retFire,threshFire = cv2.threshold(outputFogo,30,255,cv2.THRESH_BINARY)
-        heightFire, widthFire = threshFire.shape[:2]
-
-        massFire = 0
-        XcmFire  = 0.0
-        YcmFire  = 0.0
-
-        for i in range(widthFire) :
-            for j in range(heightFire) :
-                if not all(threshFire[j][i] == 0) :
-                    massFire += 1
-                    XcmFire  += i
-                    YcmFire  += j
-
-        XcmFire = XcmFire/massFire
-        YcmFire = YcmFire/massFire
-        out1.write(outputFogo)
+        gerarVideos(lowerFire, upperFire, outFire)        
         # Mascara Fumaça
         lowerSmoke = (0, 0, 130)
         upperSmoke = (179, 50, 255)
@@ -61,37 +74,14 @@ while (cap.isOpened()):
         lowerSmoke = np.array(lowerSmoke , dtype='uint8')
         upperSmoke = np.array(upperSmoke , dtype='uint8')
 
-        maskSmoke = cv2.inRange(hsv , lowerSmoke , upperSmoke)
-
-        outputFumaça = cv2.bitwise_and(frame , hsv , mask=maskSmoke)
-
-        tamanhoFumaça = cv2.countNonZero(maskSmoke)
-        print(tamanhoFumaça)
-
-        retSmoke,threshSmoke = cv2.threshold(outputFumaça,30,255,cv2.THRESH_BINARY)
-        heightSmoke, widthSmoke = threshSmoke.shape[:2]
-
-        massSmoke = 0
-        XcmSmoke  = 0.0
-        YcmSmoke  = 0.0
-
-        for i in range(widthSmoke) :
-            for j in range(heightSmoke) :
-                if not all(threshSmoke[j][i] == 0) :
-                    massSmoke += 1
-                    XcmSmoke  += i
-                    YcmSmoke  += j
-
-        XcmSmoke = XcmSmoke/massSmoke
-        YcmSmoke = YcmSmoke/massSmoke
-        out2.write(outputFumaça)
+        gerarVideos(lowerSmoke, upperSmoke, outSmoke)
 
     else:
         break
 
 cap.release()
-out1.release()
-out2.release()
+outFire.release()
+outSmoke.release()
  
 # Closes all the frames
 cv2.destroyAllWindows()
