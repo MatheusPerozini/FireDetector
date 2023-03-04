@@ -8,21 +8,12 @@ filename = 'video.mp4'
 
 url = os.path.dirname(os.path.abspath(__file__))
 cap = cv2.VideoCapture(url+'/'+filename)
-
+diferencaTamanhoFogo = []
+diferencaTamanhoFumaca = []
 outFire = cv2.VideoWriter('Fogo.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (700,600))
 outSmoke = cv2.VideoWriter('Fumaça.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (700,600))
 
-def calculaDiferenca(img1, img2, img3):
-    """
-    Captura o movimento pela subtração de pixel dos frames.
-    """
-    d1 = cv2.absdiff(img3, img2)
-    d2 = cv2.absdiff(img2, img1)
-    imagem = cv2.bitwise_and(d1,d2)
-    s,imagem = cv2.threshold(imagem, 60, 255, cv2.THRESH_BINARY)
-    return imagem
-
-def gerarVideos(lower, upper, out, hsv):
+def gerarVideos(lower, upper, out, hsv, type):
     lower = np.array(lower , dtype='uint8')
     upper = np.array(upper , dtype='uint8')
     mask = cv2.inRange(hsv , lower , upper)
@@ -30,7 +21,10 @@ def gerarVideos(lower, upper, out, hsv):
     output = cv2.bitwise_and(frame , hsv , mask=mask)
 
     tamanho = cv2.countNonZero(mask)
-    print(tamanho)
+    if type == 'fogo':
+        diferencaTamanhoFogo.append(tamanho)
+    else:
+        diferencaTamanhoFumaca.append(tamanho)
 
     ret,thresh = cv2.threshold(output,30,255,cv2.THRESH_BINARY)
     height, width = thresh.shape[:2]
@@ -65,13 +59,13 @@ while (cap.isOpened()):
         lowerFire = (0, 115, 155)
         upperFire = (30, 255, 255)
 
-        gerarVideos(lowerFire, upperFire, outFire, hsv)        
+        gerarVideos(lowerFire, upperFire, outFire, hsv, 'fogo')        
         # Mascara Fumaça
         lowerSmoke = (0, 0, 130)
         upperSmoke = (179, 50, 255)
 
-        gerarVideos(lowerSmoke, upperSmoke, outSmoke, hsv)
-
+        gerarVideos(lowerSmoke, upperSmoke, outSmoke, hsv, 'fumaca')
+        print(diferencaTamanhoFumaca, diferencaTamanhoFogo)
     else:
         break
 
