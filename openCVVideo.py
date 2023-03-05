@@ -12,7 +12,6 @@ diferencaTamanhoFogo = []
 diferencaTamanhoFumaca = []
 outFire = cv2.VideoWriter('Fogo.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (700,600))
 outSmoke = cv2.VideoWriter('Fumaça.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (700,600))
-outTest = cv2.VideoWriter('Test.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (700,600))
 widthImagem = 700
 heightImagem = 600
 
@@ -23,18 +22,15 @@ def pegarValoresRGBImagem(frame, Xcm, Ycm):
     r = 0
     g = 0
     b = 0
-    output = cv2.circle(frame, (int((Xcm - 1) + xGrid), int((Ycm - 1) + yGrid)), 1, (255,0,0), 2)
     for i in range(tamanhoGrid):
         if i % 3 == 0:
             xGrid = 1
             yGrid += 1
         rgb = frame[int((Xcm - 1) + xGrid), int((Ycm - 1) + yGrid)]
-        output = cv2.circle(frame, (int((Xcm - 1) + xGrid), int((Ycm - 1) + yGrid)), 1, (255,0,0), 2)
         xGrid += 1
         r += rgb[0]
         g += rgb[1]
         b += rgb[2]
-    outTest.write(output)
     return [int(r / tamanhoGrid), int(g / tamanhoGrid), int(b / tamanhoGrid)]
 
 def gerarVideos(lower, upper, out, hsv, type):
@@ -80,13 +76,13 @@ while (cap.isOpened()):
         frame = cv2.resize(frame, (widthImagem, heightImagem))
         blur = cv2.GaussianBlur(frame , (15 , 15) , 0)
         hsv = cv2.cvtColor(blur , cv2.COLOR_BGR2HSV)
-
+        frameRGB2BGR = cv2.cvtColor(frame , cv2.COLOR_RGB2BGR)
         # Mascara fogo
         lowerFire = (0, 115, 155)
         upperFire = (30, 255, 255)
 
         XcmFogo, YcmFogo = gerarVideos(lowerFire, upperFire, outFire, hsv, 'fogo')
-        rgbFogo = pegarValoresRGBImagem(frame, XcmFogo, YcmFogo)
+        rgbFogo = pegarValoresRGBImagem(frameRGB2BGR, XcmFogo, YcmFogo)
         print('cor do fogo centro de massa', rgbFogo)
         # Mascara Fumaça
         lowerSmoke = (0, 0, 130)
@@ -100,6 +96,5 @@ while (cap.isOpened()):
 cap.release()
 outFire.release()
 outSmoke.release()
-outTest.release()
 # Closes all the frames
 cv2.destroyAllWindows()
