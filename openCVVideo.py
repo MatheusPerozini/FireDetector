@@ -6,14 +6,16 @@ import cv2
 
 filename = 'video.mp4'
 
+widthImagem = 700
+heightImagem = 600
 url = os.path.dirname(os.path.abspath(__file__))
 cap = cv2.VideoCapture(url+'/'+filename)
 diferencaTamanhoFogo = []
 diferencaTamanhoFumaca = []
-outFire = cv2.VideoWriter('Fogo.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (700,600))
-outSmoke = cv2.VideoWriter('Fumaça.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (700,600))
-widthImagem = 700
-heightImagem = 600
+outFire = cv2.VideoWriter('Fogo.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (widthImagem, heightImagem))
+outSmoke = cv2.VideoWriter('Fumaça.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (widthImagem, heightImagem))
+f = open('data.txt', 'w')
+f.write('rgbFogo, rgbFumaca, qtdMovimentoFogo, qtdMovimentoFumaca, tamanhoFogo, tamamnhoFumaca\n')
 
 def pegarValoresRGBImagem(frame, Xcm, Ycm):
     tamanhoGrid = 9 # 9 x 9
@@ -64,12 +66,13 @@ def gerarVideos(lower, upper, out, hsv, type):
     Ycm = Ycm/mass
     output = cv2.circle(output, (int(Xcm), int(Ycm)), 20, (255,0,0), 2)
     out.write(output)
-    return [Xcm, Ycm]
+    return [Xcm, Ycm, tamanho]
 
 if cap.isOpened()== False:
     print("Error opening video stream or file")
     print(url+'/Fire-Detection/1/'+filename)
 
+count = 0
 while (cap.isOpened()):
     ret, frame = cap.read()
     if ret == True:
@@ -77,19 +80,28 @@ while (cap.isOpened()):
         blur = cv2.GaussianBlur(frame , (15 , 15) , 0)
         hsv = cv2.cvtColor(blur , cv2.COLOR_BGR2HSV)
         frameRGB2BGR = cv2.cvtColor(frame , cv2.COLOR_RGB2BGR)
+
         # Mascara fogo
         lowerFire = (0, 115, 155)
         upperFire = (30, 255, 255)
 
-        XcmFogo, YcmFogo = gerarVideos(lowerFire, upperFire, outFire, hsv, 'fogo')
+        XcmFogo, YcmFogo, tamanhoFogo = gerarVideos(lowerFire, upperFire, outFire, hsv, 'fogo')
         rgbFogo = pegarValoresRGBImagem(frameRGB2BGR, XcmFogo, YcmFogo)
-        print('cor do fogo centro de massa', rgbFogo)
+        movimentoFogo = None
+        if count >= 2:
+            movimentoFogo = abs(diferencaTamanhoFogo[count] - diferencaTamanhoFogo[count - 2])
         # Mascara Fumaça
         lowerSmoke = (0, 0, 130)
         upperSmoke = (179, 50, 255)
 
-        gerarVideos(lowerSmoke, upperSmoke, outSmoke, hsv, 'fumaca')
-        print(diferencaTamanhoFumaca, diferencaTamanhoFogo)
+        XcmFumaca, YcmFumaca, tamanhoFumaca = gerarVideos(lowerSmoke, upperSmoke, outSmoke, hsv, 'fumaca')
+        rgbFumaca = pegarValoresRGBImagem(frameRGB2BGR, XcmFumaca, YcmFumaca)
+        movimentoFumaca = None
+        if count >= 2:
+            movimentoFumaca = abs(diferencaTamanhoFumaca[count] - diferencaTamanhoFumaca[count - 2])
+
+        f.write("{}, {}, {}, {}, {}, {}\n".format(rgbFogo, rgbFumaca, movimentoFogo, movimentoFumaca, tamanhoFogo, tamanhoFumaca))
+        count += 1
     else:
         break
 
