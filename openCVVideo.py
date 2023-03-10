@@ -82,8 +82,8 @@ while (cap.isOpened()):
         frameRGB2BGR = cv2.cvtColor(frame , cv2.COLOR_RGB2BGR)
 
         # Mascara fogo
-        lowerFire = (0, 115, 155)
-        upperFire = (30, 255, 255)
+        lowerFire = (120, 27, 0)
+        upperFire = (179, 255, 255)
 
         XcmFogo, YcmFogo, tamanhoFogo = gerarVideos(lowerFire, upperFire, outFire, hsv, 'fogo')
         rgbFogo = pegarValoresRGBImagem(frameRGB2BGR, XcmFogo, YcmFogo)
@@ -91,8 +91,8 @@ while (cap.isOpened()):
         if count >= 2:
             movimentoFogo = abs(diferencaTamanhoFogo[count] - diferencaTamanhoFogo[count - 2])
         # Mascara Fumaça
-        lowerSmoke = (0, 0, 130)
-        upperSmoke = (179, 50, 255)
+        lowerSmoke = (105, 0, 90)
+        upperSmoke = (179, 140, 220)
 
         XcmFumaca, YcmFumaca, tamanhoFumaca = gerarVideos(lowerSmoke, upperSmoke, outSmoke, hsv, 'fumaca')
         rgbFumaca = pegarValoresRGBImagem(frameRGB2BGR, XcmFumaca, YcmFumaca)
