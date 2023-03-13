@@ -14,8 +14,8 @@ diferencaTamanhoFogo = []
 diferencaTamanhoFumaca = []
 outFire = cv2.VideoWriter('Fogo.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (widthImagem, heightImagem))
 outSmoke = cv2.VideoWriter('Fumaça.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (widthImagem, heightImagem))
-f = open('data.txt', 'w')
-f.write('rgbFogo, rgbFumaca, qtdMovimentoFogo, qtdMovimentoFumaca, tamanhoFogo, tamamnhoFumaca\n')
+f = open('data.csv', 'w')
+f.write('rgbFogo|rgbFumaca|qtdMovimentoFogo|qtdMovimentoFumaca|tamanhoFogo|tamamnhoFumaca\n')
 
 def pegarValoresRGBImagem(frame, Xcm, Ycm):
     tamanhoGrid = 9 # 9 x 9
@@ -100,7 +100,7 @@ while (cap.isOpened()):
         if count >= 2:
             movimentoFumaca = abs(diferencaTamanhoFumaca[count] - diferencaTamanhoFumaca[count - 2])
 
-        f.write("{}, {}, {}, {}, {}, {}\n".format(rgbFogo, rgbFumaca, movimentoFogo, movimentoFumaca, tamanhoFogo, tamanhoFumaca))
+        f.write("{}|{}|{}|{}|{}|{}\n".format(rgbFogo, rgbFumaca, movimentoFogo, movimentoFumaca, tamanhoFogo, tamanhoFumaca))
         count += 1
     else:
         break
