@@ -87,7 +87,7 @@ while (cap.isOpened()):
 
         XcmFogo, YcmFogo, tamanhoFogo = gerarVideos(lowerFire, upperFire, outFire, hsv, 'fogo')
         rgbFogo = pegarValoresRGBImagem(frameRGB2BGR, XcmFogo, YcmFogo)
-        movimentoFogo = None
+        movimentoFogo = '?'
         if count >= 2:
             movimentoFogo = abs(diferencaTamanhoFogo[count] - diferencaTamanhoFogo[count - 2])
         # Mascara Fumaça
@@ -96,7 +96,7 @@ while (cap.isOpened()):
 
         XcmFumaca, YcmFumaca, tamanhoFumaca = gerarVideos(lowerSmoke, upperSmoke, outSmoke, hsv, 'fumaca')
         rgbFumaca = pegarValoresRGBImagem(frameRGB2BGR, XcmFumaca, YcmFumaca)
-        movimentoFumaca = None
+        movimentoFumaca = '?'
         if count >= 2:
             movimentoFumaca = abs(diferencaTamanhoFumaca[count] - diferencaTamanhoFumaca[count - 2])
 
