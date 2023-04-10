@@ -4,20 +4,20 @@ import os
 import os.path
 import cv2
 
-filename = '42.jpg'
+filename = 'img.png'
 
 url = os.path.dirname(os.path.abspath(__file__))
-img = cv2.imread(url+'/Fire-Detection/1/'+filename)
+img = cv2.imread(url+'/'+filename)
 if img is None:
     print("Imagem não achada")
-    print(url+'/Fire-Detection/1/'+filename)
+    print(url+'/'+filename)
 
 blur = cv2.GaussianBlur(img , (15 , 15) , 0)
 hsv = cv2.cvtColor(blur , cv2.COLOR_BGR2HSV)
 
 # Mascara fogo
-lowerFire = (0, 115, 155)
-upperFire = (30, 255, 255)
+lowerFire = (0, 24, 0)
+upperFire = (5, 255, 255)
 
 lowerFire = np.array(lowerFire , dtype='uint8')
 upperFire = np.array(upperFire , dtype='uint8')
@@ -54,8 +54,8 @@ extentFire = plotFIre.get_window_extent().transformed(figFire.dpi_scale_trans.in
 figFire.savefig('imagem_fogo.png', bbox_inches=extentFire.expanded(1.2, 1.0))
 
 # Mascara Fumaça
-lowerSmoke = (0, 0, 130)
-upperSmoke = (179, 50, 255)
+lowerSmoke = (0, 0, 113)
+upperSmoke = (179, 50, 215)
 
 lowerSmoke = np.array(lowerSmoke , dtype='uint8')
 upperSmoke = np.array(upperSmoke , dtype='uint8')
