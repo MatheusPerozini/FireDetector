@@ -17,6 +17,12 @@ outSmoke = cv2.VideoWriter('Fumaça.avi',cv2.VideoWriter_fourcc('M','J','P','G')
 f = open('data.csv', 'a')
 f.write('rgbFogoR, rgbFogoG, rgbFogoB,rgbFumacaR, rgbFumacaG, rgbFumacaB,qtdMovimentoFogo,qtdMovimentoFumaca,tamanhoFogo,tamamnhoFumaca\n')
 
+def handleCordenates(cordinate, size):
+    if cordinate > size:
+        return size
+    else :    
+        return cordinate
+
 def pegarValoresRGBImagem(frame, Xcm, Ycm):
     tamanhoGrid = 9 # 9 x 9
     yGrid = 0
@@ -28,7 +34,7 @@ def pegarValoresRGBImagem(frame, Xcm, Ycm):
         if i % 3 == 0:
             xGrid = 1
             yGrid += 1
-        rgb = frame[int((Xcm - 1) + xGrid), int((Ycm - 1) + yGrid)]
+        rgb = frame[handleCordenates(int((Ycm - 1) + yGrid), heightImagem),handleCordenates(int((Xcm - 1) + xGrid), widthImagem)]
         xGrid += 1
         r += rgb[0]
         g += rgb[1]
