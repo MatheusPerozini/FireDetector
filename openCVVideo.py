@@ -15,7 +15,10 @@ diferencaTamanhoFumaca = []
 outFire = cv2.VideoWriter('Fogo.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (widthImagem, heightImagem))
 outSmoke = cv2.VideoWriter('Fumaça.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (widthImagem, heightImagem))
 f = open('data.csv', 'a')
-f.write('rgbFogoR, rgbFogoG, rgbFogoB,rgbFumacaR, rgbFumacaG, rgbFumacaB,qtdMovimentoFogo,qtdMovimentoFumaca,tamanhoFogo,tamamnhoFumaca\n')
+if os.path.isfile('data.csv') == False:
+    f.write('rgbFogoR, rgbFogoG, rgbFogoB,rgbFumacaR, rgbFumacaG, rgbFumacaB,qtdMovimentoFogo,qtdMovimentoFumaca,tamanhoFogo,tamamnhoFumaca\n')
+else:
+    f.write('\n')
 
 def handleCordenates(cordinate, size):
     if cordinate > size:
