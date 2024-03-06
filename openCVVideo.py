@@ -16,7 +16,7 @@ outFire = cv2.VideoWriter('Fogo.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10
 outSmoke = cv2.VideoWriter('Fumaça.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (widthImagem, heightImagem))
 f = open('data.csv', 'a')
 if os.path.isfile('data.csv') == False:
-    f.write('rgbFogoR, rgbFogoG, rgbFogoB,rgbFumacaR, rgbFumacaG, rgbFumacaB,qtdMovimentoFogo,qtdMovimentoFumaca,tamanhoFogo,tamamnhoFumaca\n')
+    f.write('rgbFogoR,rgbFogoG,rgbFogoB,rgbFumacaR,rgbFumacaG,rgbFumacaB,qtdMovimentoFogo,qtdMovimentoFumaca,tamanhoFogo,tamamnhoFumaca\n')
 else:
     f.write('\n')
 
