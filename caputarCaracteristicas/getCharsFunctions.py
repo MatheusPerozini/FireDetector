@@ -13,7 +13,7 @@ UPPER_SMOKE_MASK = (179, 140, 220)
 diferencaTamanhoFogo = []
 diferencaTamanhoFumaca = []
 
-def gerarVideos(lower, upper, out, hsv, type):
+def gerarVideos(lower, upper, hsv, type, frame, out):
     lower = np.array(lower , dtype='uint8')
     upper = np.array(upper , dtype='uint8')
     mask = cv2.inRange(hsv , lower , upper)
@@ -48,7 +48,9 @@ def gerarVideos(lower, upper, out, hsv, type):
         Ycm = Ycm/mass
 
     output = cv2.circle(output, (int(Xcm), int(Ycm)), 20, (255,0,0), 2)
-    out.write(output)
+    if out:
+        out.write(output)
+
     return [Xcm, Ycm, tamanho]
 
 def handleCordenates(cordinate, size):
