@@ -16,13 +16,13 @@ blur = cv2.GaussianBlur(img , (15 , 15) , 0)
 hsv = cv2.cvtColor(blur , cv2.COLOR_BGR2HSV)
 
 # Mascara fogo
-lowerFire = (0, 24, 0)
-upperFire = (5, 255, 255)
+LOWER_FIRE_MASK = (0, 24, 0)
+UPPER_FIRE_MASK = (5, 255, 255)
 
-lowerFire = np.array(lowerFire , dtype='uint8')
-upperFire = np.array(upperFire , dtype='uint8')
+LOWER_FIRE_MASK = np.array(LOWER_FIRE_MASK , dtype='uint8')
+UPPER_FIRE_MASK = np.array(UPPER_FIRE_MASK , dtype='uint8')
 
-maskFire = cv2.inRange(hsv , lowerFire , upperFire)
+maskFire = cv2.inRange(hsv , LOWER_FIRE_MASK , UPPER_FIRE_MASK)
 
 outputFogo = cv2.bitwise_and(img , hsv , mask=maskFire)
 
