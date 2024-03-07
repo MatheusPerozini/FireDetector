@@ -60,13 +60,13 @@ def handleCordenates(cordinate, size):
         return cordinate
 
 def pegarValoresRGBImagem(frame, Xcm, Ycm):
-    tamanhoGrid = 9 # 9 x 9
+    GRID_SIZE = 9 # 9 x 9
     yGrid = 0
     xGrid = 0
     r = 0
     g = 0
     b = 0
-    for i in range(tamanhoGrid):
+    for i in range(GRID_SIZE):
         if i % 3 == 0:
             xGrid = 1
             yGrid += 1
@@ -75,4 +75,24 @@ def pegarValoresRGBImagem(frame, Xcm, Ycm):
         r += rgb[0]
         g += rgb[1]
         b += rgb[2]
-    return [int(r / tamanhoGrid), int(g / tamanhoGrid), int(b / tamanhoGrid)]
+    return [int(r / GRID_SIZE), int(g / GRID_SIZE), int(b / GRID_SIZE)]
+
+def frameCaracteristics(frame, count, outFogo, outFumaca):
+    frame = cv2.resize(frame, (IMAGE_WIDTH, IMAGE_HEIGHT))
+    blur = cv2.GaussianBlur(frame , (15 , 15) , 0)
+    hsv = cv2.cvtColor(blur , cv2.COLOR_BGR2HSV)
+    frameRGB2BGR = cv2.cvtColor(frame , cv2.COLOR_RGB2BGR)
+        
+    XcmFogo, YcmFogo, tamanhoFogo = gerarVideos(LOWER_FIRE_MASK, UPPER_FIRE_MASK, hsv, 'fogo', frame, outFogo)
+    rgbFogo = pegarValoresRGBImagem(frameRGB2BGR, XcmFogo, YcmFogo)
+    movimentoFogo = '?'
+
+    XcmFumaca, YcmFumaca, tamanhoFumaca = gerarVideos(LOWER_SMOKE_MASK, UPPER_SMOKE_MASK, hsv, 'fumaca', frame, outFumaca)
+    rgbFumaca = pegarValoresRGBImagem(frameRGB2BGR, XcmFumaca, YcmFumaca)
+    movimentoFumaca = '?'
+
+    if (count > 2):
+        movimentoFumaca = abs(diferencaTamanhoFumaca[count] - diferencaTamanhoFumaca[count - 2])
+        movimentoFogo = abs(diferencaTamanhoFogo[count] - diferencaTamanhoFogo[count - 2])
+
+    return rgbFogo[0], rgbFogo[1], rgbFogo[2], rgbFumaca[0], rgbFumaca[1], rgbFumaca[2], movimentoFogo, movimentoFumaca, tamanhoFogo, tamanhoFumaca
