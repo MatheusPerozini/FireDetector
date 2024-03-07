@@ -6,11 +6,11 @@ from getCharsFunctions import *
 FILE_NAME = 'video1.mp4'
 
 URL_PATH = os.path.dirname(os.path.abspath(__file__))
-cap = cv2.VideoCapture(URL_PATH+'../dataset/'+FILE_NAME)
+cap = cv2.VideoCapture(URL_PATH+'/../dataset/'+FILE_NAME)
 outFire = cv2.VideoWriter('Fogo.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (IMAGE_WIDTH, IMAGE_HEIGHT))
 outSmoke = cv2.VideoWriter('Fumaça.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (IMAGE_WIDTH, IMAGE_HEIGHT))
 
-f = open('data.csv', 'a')
+f = open('./caputarCaracteristicas/data.csv', 'a')
 if os.path.isfile('data.csv') == False:
     f.write('rgbFogoR,rgbFogoG,rgbFogoB,rgbFumacaR,rgbFumacaG,rgbFumacaB,qtdMovimentoFogo,qtdMovimentoFumaca,tamanhoFogo,tamamnhoFumaca\n')
 else:
@@ -27,8 +27,8 @@ while (cap.isOpened()):
         break
     if ret == True:
         if count >= 2:
-            frameData = frameCaracteristics(frame, count, outFire, outSmoke)
-            f.write("{},{},{},{},{},{},{},{},{},{}\n".format(frameData))
+            frameData = frameCaracteristics(frame, (count - 2), outFire, outSmoke)
+            f.write("{},{},{},{},{},{},{},{},{},{}\n".format(frameData[0], frameData[1], frameData[2], frameData[3], frameData[4], frameData[5], frameData[6], frameData[7], frameData[8], frameData[9]))
 
         count += 1
     else:

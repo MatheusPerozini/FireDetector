@@ -91,7 +91,7 @@ def frameCaracteristics(frame, count, outFogo, outFumaca):
     rgbFumaca = pegarValoresRGBImagem(frameRGB2BGR, XcmFumaca, YcmFumaca)
     movimentoFumaca = '?'
 
-    if (count > 2):
+    if (count >= 2):
         movimentoFumaca = abs(diferencaTamanhoFumaca[count] - diferencaTamanhoFumaca[count - 2])
         movimentoFogo = abs(diferencaTamanhoFogo[count] - diferencaTamanhoFogo[count - 2])
 
