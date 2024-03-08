@@ -2,6 +2,8 @@ import cv2
 import os.path
 import pickle
 import sys
+import numpy as np
+from sklearn.datasets import make_blobs
 
 sys.path.append('/home/mangellan/Personal/iniciacaoCientifica/caputarCaracteristicas')
 
@@ -21,8 +23,11 @@ while (cap.isOpened()):
     ret, frame = cap.read()
     if ret == True:
         frameData = frameCaracteristics(frame, count)
-        bayessModel.predict(frameData)
-        print(bayessModel)
+        if count > 2:
+            data = np.array(frameData).reshape(1, -1)
+            result = bayessModel.predict(data)
+            print(result)
+
         count += 1
     else:
         break

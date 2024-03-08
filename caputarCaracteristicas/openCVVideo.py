@@ -11,7 +11,7 @@ outFire = cv2.VideoWriter('Fogo.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10
 outSmoke = cv2.VideoWriter('Fumaça.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (IMAGE_WIDTH, IMAGE_HEIGHT))
 
 f = open('./caputarCaracteristicas/data.csv', 'a')
-if os.path.isfile('data.csv') == False:
+if os.path.isfile('./caputarCaracteristicas/data.csv') == False:
     f.write('rgbFogoR,rgbFogoG,rgbFogoB,rgbFumacaR,rgbFumacaG,rgbFumacaB,qtdMovimentoFogo,qtdMovimentoFumaca,tamanhoFogo,tamamnhoFumaca\n')
 else:
     f.write('\n')
@@ -26,8 +26,8 @@ while (cap.isOpened()):
     if count == 6:
         break
     if ret == True:
+        frameData = frameCaracteristics(frame, count, outFire, outSmoke)
         if count >= 2:
-            frameData = frameCaracteristics(frame, (count - 2), outFire, outSmoke)
             f.write("{},{},{},{},{},{},{},{},{},{}\n".format(frameData[0], frameData[1], frameData[2], frameData[3], frameData[4], frameData[5], frameData[6], frameData[7], frameData[8], frameData[9]))
 
         count += 1
