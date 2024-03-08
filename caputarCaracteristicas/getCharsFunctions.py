@@ -77,7 +77,7 @@ def pegarValoresRGBImagem(frame, Xcm, Ycm):
         b += rgb[2]
     return [int(r / GRID_SIZE), int(g / GRID_SIZE), int(b / GRID_SIZE)]
 
-def frameCaracteristics(frame, count, outFogo, outFumaca):
+def frameCaracteristics(frame, count, outFogo=None, outFumaca=None):
     frame = cv2.resize(frame, (IMAGE_WIDTH, IMAGE_HEIGHT))
     blur = cv2.GaussianBlur(frame , (15 , 15) , 0)
     hsv = cv2.cvtColor(blur , cv2.COLOR_BGR2HSV)
