@@ -75,7 +75,8 @@ def pegarValoresRGBImagem(frame, Xcm, Ycm):
         r += rgb[0]
         g += rgb[1]
         b += rgb[2]
-    return [int(r / GRID_SIZE), int(g / GRID_SIZE), int(b / GRID_SIZE)]
+    # return [int(r / GRID_SIZE), int(g / GRID_SIZE), int(b / GRID_SIZE)]
+    return [int(((r / GRID_SIZE) + (g / GRID_SIZE + (b / GRID_SIZE)) / 3))]
 
 def frameCaracteristics(frame, count, outFogo=None, outFumaca=None):
     frame = cv2.resize(frame, (IMAGE_WIDTH, IMAGE_HEIGHT))
@@ -95,4 +96,5 @@ def frameCaracteristics(frame, count, outFogo=None, outFumaca=None):
         movimentoFumaca = abs(diferencaTamanhoFumaca[count] - diferencaTamanhoFumaca[count - 2])
         movimentoFogo = abs(diferencaTamanhoFogo[count] - diferencaTamanhoFogo[count - 2])
 
-    return rgbFogo[0], rgbFogo[1], rgbFogo[2], rgbFumaca[0], rgbFumaca[1], rgbFumaca[2], movimentoFogo, movimentoFumaca, tamanhoFogo, tamanhoFumaca
+    # return rgbFogo[0], rgbFogo[1], rgbFogo[2], rgbFumaca[0], rgbFumaca[1], rgbFumaca[2], movimentoFogo, movimentoFumaca, tamanhoFogo, tamanhoFumaca
+    return rgbFogo[0], rgbFumaca[0], movimentoFogo, movimentoFumaca, tamanhoFogo, tamanhoFumaca
