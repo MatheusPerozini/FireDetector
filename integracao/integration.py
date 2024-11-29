@@ -9,11 +9,11 @@ sys.path.append('/home/mangellan/Personal/iniciacaoCientifica/caputarCaracterist
 
 from getCharsFunctions import *
 
-FILE_NAME = 'video1.mp4'
+FILE_NAME = 'video3.mp4'
 URL_PATH = os.path.dirname(os.path.abspath(__file__))
 
 # Pega o modelo de IA
-with open('/home/mangellan/Personal/iniciacaoCientifica/modeloIA/modelBayess.pkl', 'rb') as f:
+with open('/home/mangellan/Personal/iniciacaoCientifica/modeloIA/modelCategorical.pkl', 'rb') as f:
     bayessModel = pickle.load(f)
 
 cap = cv2.VideoCapture(URL_PATH+'/../dataset/'+FILE_NAME)

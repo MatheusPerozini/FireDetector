@@ -1,7 +1,8 @@
 import numpy as np
 import cv2
+import math
 
-IMAGE_WIDTH = 700
+IMAGE_WIDTH = 470
 IMAGE_HEIGHT = 600
 
 LOWER_FIRE_MASK = (120, 27, 0)
@@ -75,8 +76,8 @@ def pegarValoresRGBImagem(frame, Xcm, Ycm):
         r += rgb[0]
         g += rgb[1]
         b += rgb[2]
-    # return [int(r / GRID_SIZE), int(g / GRID_SIZE), int(b / GRID_SIZE)]
-    return [int(((r / GRID_SIZE) + (g / GRID_SIZE + (b / GRID_SIZE)) / 3))]
+    return [int(r / GRID_SIZE), int(g / GRID_SIZE), int(b / GRID_SIZE)]
+    # return [int(((r / GRID_SIZE) + (g / GRID_SIZE + (b / GRID_SIZE)) / 3))]
 
 def frameCaracteristics(frame, count, outFogo=None, outFumaca=None):
     frame = cv2.resize(frame, (IMAGE_WIDTH, IMAGE_HEIGHT))
@@ -85,16 +86,24 @@ def frameCaracteristics(frame, count, outFogo=None, outFumaca=None):
     frameRGB2BGR = cv2.cvtColor(frame , cv2.COLOR_RGB2BGR)
         
     XcmFogo, YcmFogo, tamanhoFogo = gerarVideos(LOWER_FIRE_MASK, UPPER_FIRE_MASK, hsv, 'fogo', frame, outFogo)
-    rgbFogo = pegarValoresRGBImagem(frameRGB2BGR, XcmFogo, YcmFogo)
+    if tamanhoFogo > 0:
+        rgbFogo = pegarValoresRGBImagem(frameRGB2BGR, XcmFogo, YcmFogo)
+    else:
+        rgbFogo = [0,0,0]
+
     movimentoFogo = '?'
 
     XcmFumaca, YcmFumaca, tamanhoFumaca = gerarVideos(LOWER_SMOKE_MASK, UPPER_SMOKE_MASK, hsv, 'fumaca', frame, outFumaca)
-    rgbFumaca = pegarValoresRGBImagem(frameRGB2BGR, XcmFumaca, YcmFumaca)
+    if tamanhoFumaca > 0:
+        rgbFumaca = pegarValoresRGBImagem(frameRGB2BGR, XcmFumaca, YcmFumaca)
+    else:
+        rgbFumaca = [0,0,0]
+    
     movimentoFumaca = '?'
 
     if (count >= 2):
-        movimentoFumaca = abs(diferencaTamanhoFumaca[count] - diferencaTamanhoFumaca[count - 2])
-        movimentoFogo = abs(diferencaTamanhoFogo[count] - diferencaTamanhoFogo[count - 2])
+        movimentoFumaca = math.trunc((abs(diferencaTamanhoFumaca[count] - diferencaTamanhoFumaca[count - 2])))
+        movimentoFogo = math.trunc((abs(diferencaTamanhoFogo[count] - diferencaTamanhoFogo[count - 2])))
 
-    # return rgbFogo[0], rgbFogo[1], rgbFogo[2], rgbFumaca[0], rgbFumaca[1], rgbFumaca[2], movimentoFogo, movimentoFumaca, tamanhoFogo, tamanhoFumaca
-    return rgbFogo[0], rgbFumaca[0], movimentoFogo, movimentoFumaca, tamanhoFogo, tamanhoFumaca
+    return rgbFogo[0], rgbFogo[1], rgbFogo[2], rgbFumaca[0], rgbFumaca[1], rgbFumaca[2], movimentoFogo, movimentoFumaca, tamanhoFogo, tamanhoFumaca
+    # return rgbFogo[0], rgbFumaca[0], movimentoFogo, movimentoFumaca, tamanhoFogo, tamanhoFumaca
