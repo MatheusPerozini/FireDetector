@@ -3,6 +3,10 @@ Iniciação cientifica criando uma IA para detecção de Fogo e fumaça para aju
 
 Scientific initiation creating an AI for Fire and smoke detection to help fight forest fires.
 
+## Dataset
+
+https://ifspedubr-my.sharepoint.com/:f:/g/personal/matheus_magalhaes_aluno_ifsp_edu_br/EpoZP0wcxExCut49VkLAqpAB-rq96Xu2_afd1LiGiTdGHQ?e=2UrvWd
+
 ## openCVVideo.py
 
 Este arquivo serve para colear as informações dos vídeos para realizar a construção do dataset.
