@@ -13,13 +13,10 @@ outFire = cv2.VideoWriter('Fogo.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10
 outSmoke = cv2.VideoWriter('Fumaça.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (IMAGE_WIDTH, IMAGE_HEIGHT))
 
 if os.path.isfile('./caputarCaracteristicas/data.csv') == False:
-    # f = open('./caputarCaracteristicas/data.csv', 'a')
-    f = open('./caputarCaracteristicas/data-5.csv', 'a')
+    f = open('./caputarCaracteristicas/data.csv', 'a')
     f.write('rgbFogoR,rgbFogoG,rgbFogoB,rgbFumacaR,rgbFumacaG,rgbFumacaB,qtdMovimentoFogo,qtdMovimentoFumaca,tamanhoFogo,tamamnhoFumaca')
-    # f.write('rgbFogoMedio,rgbFumacaMedio,qtdMovimentoFogo,qtdMovimentoFumaca,tamanhoFogo,tamamnhoFumaca')
 else:
-    # f = open('./caputarCaracteristicas/data.csv', 'a')
-    f = open('./caputarCaracteristicas/data-5.csv', 'a')
+    f = open('./caputarCaracteristicas/data.csv', 'a')
 
 if cap.isOpened()== False:
     print("Error opening video stream or file")
@@ -33,7 +30,6 @@ while (cap.isOpened()):
     if ret == True:
         frameData = frameCaracteristics(frame, count, outFire, outSmoke)
         if count >= 2:
-            # f.write("\n{},{},{},{},{},{}".format(frameData[0], frameData[1], frameData[2], frameData[3], frameData[4], frameData[5]))
             f.write("\n{},{},{},{},{},{},{},{},{},{}".format(frameData[0], frameData[1], frameData[2], frameData[3], frameData[4], frameData[5], frameData[6], frameData[7], frameData[8], frameData[9]))
 
         count += 1
