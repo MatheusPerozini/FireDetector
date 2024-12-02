@@ -1,4 +1,4 @@
-# iniciacao Cientifica - Scientific initiation
+# Fire detector
 Iniciação cientifica criando uma IA para detecção de Fogo e fumaça para ajudar no combate de incêndios florestais.
 
 Scientific initiation creating an AI for Fire and smoke detection to help fight forest fires.
